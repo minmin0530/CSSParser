@@ -1,0 +1,15 @@
+#test {
+    width: 100px;
+    height: 100px;
+    display: inline;
+}
+
+.container {
+    color: red;
+    background: gray;
+    width: 100%;
+}
+
+article {
+    width: 80%;
+}
