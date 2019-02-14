@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <title>test</title>
-        <script src="css_parser.js"></script>
     </head>
     <body>
         <script>
@@ -42,13 +41,24 @@ xhr.onreadystatechange = function() {
 xhr.open( 'POST', './confirm.php', false );
 xhr.setRequestHeader( 'Content-Type', 'application/x-www-form-urlencoded' );
 
-xhr.send( "content=" + encodeURIComponent(document.getElementsByTagName('article')[0].innerHTML));  //document.fm.content.value));
+xhr.send("to=" + document.fm.to.value + "&" + "title=" + encodeURIComponent(document.fm.title.value) + "&" + "content=" + encodeURIComponent(document.fm.content.value));
 xhr.abort();
 }
 
         </script>
         <form name="fm">
-            <article name="content" contenteditable="true"></article>
+            <p>
+              送信先
+            </p>
+            <input type="text" name="to">
+            <p>
+              メールのタイトル
+            </p>
+            <input type="text" name="title">
+            <p>
+              本文
+            </p>
+            <textarea name="content" cols="50" rows="5"></textarea>
           </form>
         <button onclick="ajax();">送信</button>
         <div id="push"></div>

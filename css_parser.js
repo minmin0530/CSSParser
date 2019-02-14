@@ -9,32 +9,51 @@ function parse(css) {
     const NEW_LINE = '<br>';
     css = css.replace(/\r?\n/g, NEW_LINE);
     let element = document.getElementsByTagName('article')[0];
-    let pos = css.indexOf('{');
-    let begin = css.lastIndexOf(NEW_LINE, pos);
-    let token = '';
-    if (begin == -1) {
-        token = css.substring(0, pos);
-    } else {
-        token = css.substring(begin + 4, pos);
-    }
-    let end = css.indexOf('}', pos) + 1;
-    let body = css.substring(pos, end);
 
-    let lines = [];
-    let lineBegin = 0;
-    let linePos = 0;
+    let pos = 0;
+    let begin = 0;
+    let end = 0;
+    while (true) {
 
-    while (linePos != -1) {
-        linePos = body.indexOf(NEW_LINE, lineBegin);
-        if (linePos != -1) {
-            lines.push(body.substring(lineBegin, linePos));
-            lineBegin = linePos + 4;
-            element.innerHTML += lines[lines.length - 1] + '<br>';
+        pos = css.indexOf('{', end);
+        if (pos == -1) {
+            break;
         }
-    }
-    lines.push(body.substring(lineBegin, body.length));
-    element.innerHTML += lines[lines.length - 1];
+        begin = css.lastIndexOf(NEW_LINE, pos);
 
+        let token = '';
+        if (begin == -1) {
+            token = css.substring(0, pos);
+        } else {
+            token = css.substring(begin, pos);
+        }
+        element.innerHTML += '<span style="color:red;">' + token + '</span>';
+        end = css.indexOf('}', pos) + 1;
+        let body = css.substring(pos, end);
+
+        let lines = [];
+        let lineBegin = 0;
+        let linePos = 0;
+        let separater = 0;
+        let property = '';
+        let remaining = '';
+
+        while (linePos != -1) {
+            linePos = body.indexOf(NEW_LINE, lineBegin);
+            if (linePos != -1) {
+                lines.push(body.substring(lineBegin, linePos));
+
+                separater = lines[lines.length - 1].indexOf(':');
+                property = lines[lines.length - 1].substring(0, separater);
+                remaining = lines[lines.length - 1].substring(separater, lines[lines.length - 1].length);
+
+                lineBegin = linePos + 4;
+                element.innerHTML += '<span style="color:blue;">' + property + '</span>' + remaining + '<br>';
+            }
+        }
+        lines.push(body.substring(lineBegin, body.length));
+        element.innerHTML += lines[lines.length - 1] + '<br>';
+    }
     // linePos = body.indexOf(NEW_LINE, linePos + 1);
     // lines.push(body.substring(lineBegin, linePos));
 
